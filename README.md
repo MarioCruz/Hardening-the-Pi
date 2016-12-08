@@ -35,12 +35,15 @@ Finally set a password for your new user, log out and log back in as the new use
 ```
 Optimize GPU memory-split
 This line will optimize the split of memory between the system and your Pi. A reboot is required but check the output of free -h before and after.
+
 ```
 # free -h
 ```
-             total       used       free
-Mem:          925M        72M       853M  
+
+Mem          total       used       free
+              925M        72M       853M  
 -/+ buffers/cache:        30M       895M
+
 Swap:          99M         0B        99M
 
 ```
