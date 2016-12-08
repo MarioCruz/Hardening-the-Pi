@@ -1,5 +1,7 @@
 # Hardening-the-Pi
 
+This is from @alexellisuk Blog post http://blog.alexellis.io/hardened-raspberry-pi-nas/#2hardeningthepi
+
 Add new user
 Add a brand-new user to the system and delete the built-in pi user. We don't even want to risk leaving the default user in-tact.
 ```
@@ -56,18 +58,24 @@ The avahi-daemon runs as a systemd service and will allow you to discover the Pi
  Main PID: 391 (avahi-daemon)
    Status: "avahi-daemon 0.6.31 starting up."
    CGroup: /system.slice/avahi-daemon.service
-2.4 Configure a static IP address
+   
+# Configure a static IP address
 You will have an IP address issued via DHCP from your home router. It's a good idea to set this to a permanent number. Pick a high number so that it won't get allocated to another device on your network.
 
-If you want to double check that nobody has that IP then type in ping -c 1 192.168.0.240
+If you want to double check that nobody has that IP then type in
+```
+ping -c 1 192.168.0.240
+```
 
 Add these lines to /etc/dhcpcd.conf first checking if your home router assigns the 192.168.0.0/24 or 192.168.1.0/24 range.
 
+```
 interface eth0  
 static ip_address=192.168.0.240/24  
 static routers=192.168.0.1  
 static domain_name_servers=8.8.8.8  
 Reboot your Pi. The DNS entry here corresponds to Google's primary server.
+```
 
 2.5 Disallow password logins over SSH
 Given enough time or a weak enough password a brute-force attacker with access to your Pi could gain entry to your Pi. That barrier can be made effectively much higher by disallowing SSH to accept password logins.
@@ -87,13 +95,7 @@ Add PasswordAuthentication no to your SSHD config file:
 echo "PasswordAuthentication no" | sudo tee -a /etc/ssh/sshd_config  
 Reboot your system and check that you can still access the Pi remotely.
 
-2.6 Do not open your NAS to the Internet
-A NeXTcube was used by Tim Berners-Lee as the first Web server on the World Wide Web.World's first web-server
-
-The Internet is not what it was in 1969 - I would not recommend opening any ports on your NAS to the Internet. If you insist and know the risks then check out port forwarding or NAT on your ISP's router admin page.
-
-If you expose SSH to the world on port 22, you can expect someone to find your Pi and start a brute force attack. Even if they cannot get in this is a drain on your system logs and CPU resources.
-
 To check your system logs for SSH type in:
-
-# sudo journalctl _COMM=sshd --since=today
+```
+sudo journalctl _COMM=sshd --since=today
+```
